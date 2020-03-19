@@ -25,8 +25,14 @@ $app = new \Slim\App([
 
 $app->get('/parties[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\PartiesController($this))->getParties($rq, $rs, $args);
-});
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':getToken')->add(\lbs\geoquizz\control\Middleware::class . ':checkToken');
 
+$app->post('/parties[/]', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\PartiesController($this))->insertPartie($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
 
+$app->put('/parties/{id}/{data}/{value}', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\PartiesController($this))->updatePartie($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
 
 $app->run();

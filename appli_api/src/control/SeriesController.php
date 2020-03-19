@@ -5,8 +5,6 @@ namespace lbs\geoquizz\control;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Ramsey\Uuid\Uuid;
-use GuzzleHttp\Client;
 use \lbs\geoquizz\model\Serie as Serie;
 
 class SeriesController
@@ -21,14 +19,13 @@ class SeriesController
     public function getSeries(Request $req, Response $resp, array $args)
     {
         try {
-            $parties = Partie::all();
+            $series = Serie::all();
 
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
 
             $rs->getBody()->write(json_encode([
-                "type" => "collection",
-                "parties" => $parties
+                "series" => $series
                 ]));
 
             return $rs;

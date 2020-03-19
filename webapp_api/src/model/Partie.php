@@ -6,9 +6,8 @@ class Partie extends \Illuminate\Database\Eloquent\Model
 {
     protected $table = 'partie';
     protected $primary_key = 'id';
-
     public $incrementing = false;
-    public $keyType = 'string';
+    public $timestamps = false;
 
     /*public function getItems()
     {

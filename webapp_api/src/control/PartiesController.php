@@ -40,7 +40,7 @@ class PartiesController
         }
     }
 
-    public function insertNouvellePartie(Request $req, Response $resp, array $args)
+    public function insertPartie(Request $req, Response $resp, array $args)
     {
         if ($req->getAttribute('has_errors')) {
             $errors = $req->getAttribute('errors');
@@ -51,6 +51,7 @@ class PartiesController
             $partie_status = $body["status"];
             $partie_score = $body["score"];
             $partie_joueur = $body["joueur"];
+            $partie_serie_id = $body["id_serie"];
 
             $partie = new Partie();
             $partie->id = Uuid::uuid4();
@@ -61,12 +62,15 @@ class PartiesController
             $partie->status = $partie_status;
             $partie->score = $partie_score;
             $partie->joueur = $partie_joueur;
+            $partie->id_serie = $partie_serie_id;
             $partie->save();
 
             $rs = $resp->withStatus(201)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode([
-                "message" => "ha funcionado este pedo"
+                "message" => "Vous venez de creer une nouvelle partie",
+                "id" => $partie->id,
+                "token" => $partie->token
             ]));
             return $rs;    
         } /*else {
@@ -78,5 +82,34 @@ class PartiesController
             ]));
             return $rs;
         }*/
+    }
+
+    public function updatePartie(Request $req, Response $resp, array $args)
+    {
+        if ($partie = Partie::find($args["id"])) {
+            switch ($args["data"]) {
+                case "status":
+                    if (filter_var($args['value'], FILTER_SANITIZE_STRING) == !0) {
+                        $partie->status = filter_var($args['value'], FILTER_SANITIZE_STRING);
+                        $partie->save();
+                    } else {
+                        echo "please use a valid status format";
+                    }
+                    break;
+                case "score":
+                    $partie->score = filter_var($args['value']);
+                    $partie->save();
+                    break;
+            }
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode($partie));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(404)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(['Error_code' => 404, 'please enter an existing id']));
+            return $rs;
+        }
     }
 }
