@@ -11,8 +11,8 @@ services:
     - VHOST_HOSTNAME=api.webapp.local
     - VHOST_DOCROOT=/var/www/api
     ports:
-    - "20080:80"
-    - "20043:443"
+    - "19080:80"
+    - "19043:443"
     volumes:
     - ./webapp_api/api:/var/www/api
     - ./webapp_api/src:/var/www/src
@@ -28,8 +28,8 @@ services:
       - VHOST_HOSTNAME=api.backoffice.local
       - VHOST_DOCROOT=/var/www/api
     ports:
-      - "21080:80"
-      - "21043:443"
+      - "19180:80"
+      - "19143:443"
     volumes :
       - ./backoffice_api/api:/var/www/api
       - ./backoffice_api/src:/var/www/src
@@ -45,8 +45,8 @@ services:
       - VHOST_HOSTNAME=api.appli.local
       - VHOST_DOCROOT=/var/www/api
     ports:
-      - "22080:80"
-      - "22043:443"
+      - "19280:80"
+      - "19243:443"
     volumes :
       - ./appli_api/api:/var/www/api
       - ./appli_api/src:/var/www/src
