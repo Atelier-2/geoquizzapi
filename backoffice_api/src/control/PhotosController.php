@@ -62,7 +62,8 @@ class PhotosController
                 $rs = $resp->withStatus(201)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
                 $rs->getBody()->write(json_encode([
-                    "message" => "ha funcionado este pedo"
+                    "message" => "Vous venez d'ajouter une nouevelle photo",
+                    "photo" => $photo
                 ]));
                 return $rs;    
             } catch(\Exception $e) {

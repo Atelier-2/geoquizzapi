@@ -43,4 +43,14 @@ $app->put('/serie/{id}/{data}/{value}', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\SeriesController($this))->updateSerie($rq, $rs, $args);
 })->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
 
+$app->post('/photos[/]', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\PhotosController($this))->insertPhoto($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
+
+$app->get('/photos[/]', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\PhotosController($this))->getPhotos($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
+
+
+
 $app->run();
