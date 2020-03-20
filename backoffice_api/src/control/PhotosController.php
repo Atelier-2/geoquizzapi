@@ -5,8 +5,6 @@ namespace lbs\geoquizz\control;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Ramsey\Uuid\Uuid;
-use GuzzleHttp\Client;
 use \lbs\geoquizz\model\Photo as Photo;
 
 class PhotosController
@@ -18,65 +16,64 @@ class PhotosController
         $this->c = $c;
     }
 
-    public function getParties(Request $req, Response $resp, array $args)
+    public function getPhotos(Request $req, Response $resp, array $args)
     {
         try {
-            $parties = Partie::all();
+            $photos = Photo::all();
 
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
 
             $rs->getBody()->write(json_encode([
-                "type" => "collection",
-                "parties" => $parties
+                "photos" => $photos
                 ]));
 
             return $rs;
         } catch (\Exception $e) {
             $rs = $resp->withStatus(404)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(['Error_code' => 404, 'Error message' => "token no corresponding"]));
+            $rs->getBody()->write(json_encode(['Error_code' => 404, 'Error message' => $e]));
             return $rs;
         }
     }
 
-    public function insertNouvellePartie(Request $req, Response $resp, array $args)
+    public function insertPhoto(Request $req, Response $resp, array $args)
     {
         if ($req->getAttribute('has_errors')) {
             $errors = $req->getAttribute('errors');
             var_dump($errors);
-        } else {  
-            $body = $req->getParsedBody();
-            $partie_nb_photos = $body["nb_photos"];
-            $partie_status = $body["status"];
-            $partie_score = $body["score"];
-            $partie_joueur = $body["joueur"];
+        } else {
+            try {  
+                $body = $req->getParsedBody();
+                $photo_description = $body["description"];
+                $photo_long = $body["long"];
+                $photo_lat = $body["lat"];
+                $photo_url = $body["url"];
+                $photo_id_serie = $body["id_serie"];
 
-            $partie = new Partie();
-            $partie->id = Uuid::uuid4();
-            $token = random_bytes(32);
-            $token = bin2hex($token);
-            $partie->token = $token;
-            $partie->nb_photos = $partie_nb_photos;
-            $partie->status = $partie_status;
-            $partie->score = $partie_score;
-            $partie->joueur = $partie_joueur;
-            $partie->save();
+                $photo = new Photo();
+                $photo->description = $photo_description;
+                $photo->long = $photo_long;
+                $photo->lat = $photo_lat;
+                $photo->url = $photo_url;
+                $photo->id_serie = $photo_id_serie;
+                $photo->save();
 
-            $rs = $resp->withStatus(201)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode([
-                "message" => "ha funcionado este pedo"
-            ]));
-            return $rs;    
-        } /*else {
-            $rs = $resp->withStatus(404)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode([
-                'Error_code' => 404,
-                'Error_message' => "something went wrong"
-            ]));
-            return $rs;
-        }*/
+                $rs = $resp->withStatus(201)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode([
+                    "message" => "ha funcionado este pedo"
+                ]));
+                return $rs;    
+            } catch(\Exception $e) {
+                $rs = $resp->withStatus(404)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode([
+                    'Error_code' => 404,
+                    'Error_message' => $e
+                ]));
+                return $rs;
+            }
+        }
     }
 }

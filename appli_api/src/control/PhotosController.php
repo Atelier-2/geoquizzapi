@@ -42,36 +42,38 @@ class PhotosController
         if ($req->getAttribute('has_errors')) {
             $errors = $req->getAttribute('errors');
             var_dump($errors);
-        } else {  
-            $body = $req->getParsedBody();
-            $photo_description = $body["description"];
-            $photo_long = $body["long"];
-            $photo_lat = $body["lat"];
-            $photo_url = $body["url"];
-            $photo_id_serie = $body["id_serie"];
+        } else {
+            try {  
+                $body = $req->getParsedBody();
+                $photo_description = $body["description"];
+                $photo_long = $body["long"];
+                $photo_lat = $body["lat"];
+                $photo_url = $body["url"];
+                $photo_id_serie = $body["id_serie"];
 
-            $photo = new Photo();
-            $photo->description = $photo_description;
-            $photo->long = $photo_long;
-            $photo->lat = $photo_lat;
-            $photo->url = $photo_url;
-            $photo->id_serie = $photo_id_serie;
-            $photo->save();
+                $photo = new Photo();
+                $photo->description = $photo_description;
+                $photo->long = $photo_long;
+                $photo->lat = $photo_lat;
+                $photo->url = $photo_url;
+                $photo->id_serie = $photo_id_serie;
+                $photo->save();
 
-            $rs = $resp->withStatus(201)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode([
-                "message" => "ha funcionado este pedo"
-            ]));
-            return $rs;    
-        } /*else {
-            $rs = $resp->withStatus(404)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode([
-                'Error_code' => 404,
-                'Error_message' => "something went wrong"
-            ]));
-            return $rs;
-        }*/
+                $rs = $resp->withStatus(201)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode([
+                    "message" => "ha funcionado este pedo"
+                ]));
+                return $rs;    
+            } catch(\Exception $e) {
+                $rs = $resp->withStatus(404)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode([
+                    'Error_code' => 404,
+                    'Error_message' => $e
+                ]));
+                return $rs;
+            }
+        }
     }
 }

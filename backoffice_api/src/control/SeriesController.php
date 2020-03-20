@@ -21,18 +21,37 @@ class SeriesController
     public function getSeries(Request $req, Response $resp, array $args)
     {
         try {
-            $parties = Partie::all();
+            $series = Serie::all();
 
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
 
             $rs->getBody()->write(json_encode([
-                "type" => "collection",
-                "parties" => $parties
+                "series" => $series
                 ]));
 
             return $rs;
         } catch (\Exception $e) {
+            $rs = $resp->withStatus(404)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(['Error_code' => 404, 'Error message' => "token no corresponding"]));
+            return $rs;
+        }
+    }
+
+    public function getSerie(Request $req, Response $resp, array $args)
+    {
+        $id = $args['id'];
+        $serie = Serie::where('id', '=', $id)->get();
+        if (!$serie->isEmpty()) {
+            
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode([
+                "serie" => $serie
+            ]));
+            return $rs;
+        } else {
             $rs = $resp->withStatus(404)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode(['Error_code' => 404, 'Error message' => "token no corresponding"]));
@@ -46,37 +65,87 @@ class SeriesController
             $errors = $req->getAttribute('errors');
             var_dump($errors);
         } else {  
-            $body = $req->getParsedBody();
-            $partie_nb_photos = $body["nb_photos"];
-            $partie_status = $body["status"];
-            $partie_score = $body["score"];
-            $partie_joueur = $body["joueur"];
+            try {
+                $body = $req->getParsedBody();
+                $serie_ville = $body["ville"];
+                $serie_map_refs = $body["map_refs"];
 
-            $partie = new Partie();
-            $partie->id = Uuid::uuid4();
-            $token = random_bytes(32);
-            $token = bin2hex($token);
-            $partie->token = $token;
-            $partie->nb_photos = $partie_nb_photos;
-            $partie->status = $partie_status;
-            $partie->score = $partie_score;
-            $partie->joueur = $partie_joueur;
-            $partie->save();
+                $serie = new Serie();
+                $serie->ville = $serie_ville;
+                $serie->map_refs = $serie_map_refs;
+                $serie->save();
 
-            $rs = $resp->withStatus(201)
+                $rs = $resp->withStatus(201)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode([
+                    "message" => "ha funcionado este pedo"
+                ]));
+                return $rs;    
+            } catch(\Exception $e) {
+                $rs = $resp->withStatus(404)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode([
+                    'Error_code' => 404,
+                    'Error_message' => $e
+                ]));
+                return $rs;
+            }
+        }    
+    }
+
+    public function updateSerie(Request $req, Response $resp, array $args)
+    {
+        if ($serie = Serie::find($args["id"])) {
+            switch ($args["data"]) {
+                case "ville":
+                    $serie->ville = filter_var($args['value'], FILTER_SANITIZE_STRING);
+                    $serie->save();
+                    break;
+                case "map_refs":
+                    $serie->map_refs = filter_var($args['value'], FILTER_SANITIZE_STRING);
+                    $serie->save();
+                    break;
+            }
+            $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode([
-                "message" => "ha funcionado este pedo"
-            ]));
-            return $rs;    
-        } /*else {
+            $rs->getBody()->write(json_encode($serie));
+            return $rs;
+        } else {
             $rs = $resp->withStatus(404)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(['Error_code' => 404, 'please enter an existing id']));
+            return $rs;
+        }
+    }
+
+    public function getSeriePhotos(Request $req, Response $resp, array $args)
+    {
+        $id = $args['id'];
+        $series = Serie::where('id', '=', $id)->get();
+        if (!$series->isEmpty()) {
+            foreach ($series as $serie) {
+                $serie_photos = $serie->getPhotos()->get();
+            }
+            
+            foreach ($serie_photos as $photo) {
+                $photos = array();
+                $photos["description"] = $photo->description;
+                $photos["long"] = $photo->long;
+                $photos["lat"] = $photo->lat;
+                $photos["url"] = $photo->url;
+                $photos["id_serie"] = $photo->id_serie;
+            }
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode([
-                'Error_code' => 404,
-                'Error_message' => "something went wrong"
+                "photos" => $photos
             ]));
             return $rs;
-        }*/
+        } else {
+            $rs = $resp->withStatus(404)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(['Error_code' => 404, 'Error message' => "token no corresponding"]));
+            return $rs;
+        }
     }
 }

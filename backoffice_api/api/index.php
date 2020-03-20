@@ -23,10 +23,24 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
-$app->get('/parties[/]', function ($rq, $rs, $args) {
-    return (new lbs\geoquizz\control\PartiesController($this))->getParties($rq, $rs, $args);
-});
+$app->get('/series[/]', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\SeriesController($this))->getSeries($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
 
+$app->get('/serie/{id}', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\SeriesController($this))->getSerie($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
 
+$app->get('/serie/{id}/photos[/]', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\SeriesController($this))->getSeriePhotos($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
+
+$app->post('/series[/]', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\SeriesController($this))->insertSerie($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
+
+$app->put('/serie/{id}/{data}/{value}', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\SeriesController($this))->updateSerie($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
 
 $app->run();
