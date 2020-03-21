@@ -40,8 +40,8 @@ class Middleware
         $dote_position = strpos($getHeader_value_decode, ':');
         $user_name = substr($getHeader_value_decode, 0, $dote_position);
         $user_passwd = substr($getHeader_value_decode, $dote_position + 1);
-        $rq = $rq->withAttribute("user_name", $user_name);
-        $rq = $rq->withAttribute("user_passwd", $user_passwd);
+        $rq = $rq->withAttribute("mail", $user_name);
+        $rq = $rq->withAttribute("password", $user_passwd);
         return $next($rq, $rs);
     }
 

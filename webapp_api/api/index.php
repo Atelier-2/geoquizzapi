@@ -35,4 +35,8 @@ $app->put('/partie/{id}/{data}/{value}', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\PartiesController($this))->updatePartie($rq, $rs, $args);
 })->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':getToken')->add(\lbs\geoquizz\control\Middleware::class . ':checkToken');
 
+$app->get('/serie/{id}/photos[/]', function ($rq, $rs, $args) {
+    return (new lbs\geoquizz\control\SeriesController($this))->getSeriePhotos($rq, $rs, $args);
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':getToken')->add(\lbs\geoquizz\control\Middleware::class . ':checkToken');
+
 $app->run();

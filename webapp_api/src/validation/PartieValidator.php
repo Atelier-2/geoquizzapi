@@ -12,10 +12,7 @@ class PartieValidator
             [
                 'id' => v::StringType()->alpha(),
                 'mail' => v::email(),
-                'livraison' => [
-                    'date' => v::date('d-m-Y')->min('now'),
-                    'heure' => v::date('H:i'),
-                ],
+                'livraison' => v::date('d-m-Y')->min('now'),
                 "client_id" => v::optional(v::intVal()),
                 "items" => v::arrayVal()->each(v::arrayVal()
                     ->key('uri', v::stringType())

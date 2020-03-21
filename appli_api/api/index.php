@@ -4,6 +4,8 @@ require '../src/vendor/autoload.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \lbs\common\bootstrap\Eloquent;
+use \DavidePastore\Slim\Validation\Validation as Validation;
 
 $config = parse_ini_file("conf/conf.ini");
 $db = new Illuminate\Database\Capsule\Manager();
@@ -27,6 +29,6 @@ $app->get('/photos[/]', function ($rq, $rs, $args) {
 
 $app->post('/photos[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\PhotosController($this))->insertPhoto($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(new Validation(lbs\geoquizz\validation\PhotoValidator::validators()));
 
 $app->run();
