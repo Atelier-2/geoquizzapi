@@ -23,6 +23,10 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
+$app->options('/{routes:.+}', function($request, $response, $args) {
+    return $response;
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS');
+
 $app->get('/series[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\SeriesController($this))->getSeries($rq, $rs, $args);
 })->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');

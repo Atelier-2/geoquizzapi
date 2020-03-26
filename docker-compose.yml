@@ -8,11 +8,11 @@ services:
   api.webapp:
     image: canals/php:latest
     environment:
-    - VHOST_HOSTNAME=api.webapp.local
+    - VHOST_HOSTNAME=docketu.iutnc.univ-lorraine.fr
     - VHOST_DOCROOT=/var/www/api
     ports:
-    - "19080:80"
-    - "19043:443"
+    - "21380:80"
+    - "21343:443"
     volumes:
     - ./webapp_api/api:/var/www/api
     - ./webapp_api/src:/var/www/src
@@ -25,11 +25,11 @@ services:
   api.backoffice:
     image: canals/php:latest
     environment:
-      - VHOST_HOSTNAME=api.backoffice.local
+      - VHOST_HOSTNAME=docketu.iutnc.univ-lorraine.fr
       - VHOST_DOCROOT=/var/www/api
     ports:
-      - "19180:80"
-      - "19143:443"
+      - "21180:80"
+      - "21143:443"
     volumes :
       - ./backoffice_api/api:/var/www/api
       - ./backoffice_api/src:/var/www/src
@@ -42,11 +42,11 @@ services:
   api.appli:
     image: canals/php:latest
     environment:
-      - VHOST_HOSTNAME=api.appli.local
+      - VHOST_HOSTNAME=docketu.iutnc.univ-lorraine.fr
       - VHOST_DOCROOT=/var/www/api
     ports:
-      - "19280:80"
-      - "19243:443"
+      - "21280:80"
+      - "21243:443"
     volumes :
       - ./appli_api/api:/var/www/api
       - ./appli_api/src:/var/www/src
@@ -72,15 +72,11 @@ services:
       - "3307:3306"
     networks:
       - lbs.net
-    volumes :
-      - ./backoffice_api/sql:/var/sql
-      - ./appli_api/sql:/var/sql
-      - ./webapp_api/sql:/var/sql
 
   adminer:
      image: adminer
      ports:
-       - "8080:8080"
+       - "21080:8080"
      networks:
        - lbs.net
      links:

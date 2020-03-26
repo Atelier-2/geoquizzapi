@@ -23,6 +23,10 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
+$app->options('/{routes:.+}', function($request, $response, $args) {
+    return $response;
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS');
+
 $app->get('/parties[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\PartiesController($this))->getParties($rq, $rs, $args);
 })->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':getToken')->add(\lbs\geoquizz\control\Middleware::class . ':checkToken');
