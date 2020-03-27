@@ -29,10 +29,10 @@ $app->options('/{routes:.+}', function($request, $response, $args) {
 
 $app->get('/photos[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\PhotosController($this))->getPhotos($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors');
 
 $app->post('/photos[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\PhotosController($this))->insertPhoto($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(new Validation(lbs\geoquizz\validation\PhotoValidator::validators()));
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(new Validation(lbs\geoquizz\validation\PhotoValidator::validators()));
 
 $app->run();
