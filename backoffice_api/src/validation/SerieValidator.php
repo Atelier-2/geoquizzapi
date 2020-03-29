@@ -10,8 +10,8 @@ class SerieValidator
     {
         return
             [
-                'ville' => v::StringType()->alpha(),
-                'map_refs' => v::StringType()->alpha()
+                'ville' => v::StringType(),
+                'map_refs' => v::StringType()
             ];
     }
 }

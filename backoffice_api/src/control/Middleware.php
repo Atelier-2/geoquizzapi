@@ -45,28 +45,6 @@ class Middleware
         return $next($rq, $rs);
     }
 
-    function checkToken(Request $rq, Response $rs, callable $next)
-    {
-        if (!empty($rq->getQueryParams('token', null))) {
-            $token = $rq->getQueryParams("token");
-            $rq = $rq->withAttribute("token", $token);
-            return $next($rq, $rs);
-        } else {
-            $rs = $rs->withStatus(401)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(['type' => 'error', 'Error_code' => 401, 'message :' => 'no token found in URL']));
-            return $rs;
-        }
-    }
-
-    function getToken(Request $rq, Response $rs, callable $next)
-    {
-        $token = $rq->getAttribute("token");
-        $token = $token["token"];
-        $rq = $rq->withAttribute("token", $token);
-        return $next($rq, $rs);
-    }
-
     public function checkJWT(Request $rq, Response $rs, callable $next)
     {
         if (!empty($h = $rq->getHeader("Authorization")[0]) and strpos($h, "Bearer") !== false) {

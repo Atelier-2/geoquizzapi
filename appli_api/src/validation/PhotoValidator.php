@@ -10,7 +10,7 @@ class PhotoValidator
     {
         return
             [
-                'description' => v::StringType()->alpha(),
+                'description' => v::StringType(),
                 'long' => v::floatVal(),
                 'lat' => v::floatVal(),
                 "url" => v::StringType(),

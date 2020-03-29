@@ -36,3 +36,4 @@ $app->post('/photos[/]', function ($rq, $rs, $args) {
 })->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(new Validation(lbs\geoquizz\validation\PhotoValidator::validators()));
 
 $app->run();
+

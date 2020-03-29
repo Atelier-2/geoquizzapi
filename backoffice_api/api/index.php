@@ -29,11 +29,11 @@ $app->options('/{routes:.+}', function($request, $response, $args) {
 
 $app->get('/series[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\SeriesController($this))->getSeries($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
 
 $app->get('/serie/{id}', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\SeriesController($this))->getSerie($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
 
 $app->get('/serie/{id}/photos[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\SeriesController($this))->getSeriePhotos($rq, $rs, $args);
@@ -41,19 +41,19 @@ $app->get('/serie/{id}/photos[/]', function ($rq, $rs, $args) {
 
 $app->post('/series[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\SeriesController($this))->insertSerie($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(new Validation(lbs\geoquizz\validation\SerieValidator::validators()))->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(new Validation(lbs\geoquizz\validation\SerieValidator::validators()))->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
 
 $app->put('/serie/{id}/{data}/{value}', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\SeriesController($this))->updateSerie($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
+})->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
 
 $app->post('/photos[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\PhotosController($this))->insertPhoto($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(new Validation(lbs\geoquizz\validation\PhotoValidator::validators()))->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
+})->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT')->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(new Validation(lbs\geoquizz\validation\PhotoValidator::validators()));
 
 $app->get('/photos[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\PhotosController($this))->getPhotos($rq, $rs, $args);
-})->add(lbs\geoquizz\control\Middleware::class . ':headersCors')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin')->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT');
+})->add(lbs\geoquizz\control\Middleware::class . ':decodeJWT')->add(lbs\geoquizz\control\Middleware::class . ':checkJWT')->add(lbs\geoquizz\control\Middleware::class . ':headersCORS')->add(lbs\geoquizz\control\Middleware::class . ':checkHeaderOrigin');
 
 $app->post('/user/auth[/]', function ($rq, $rs, $args) {
     return (new lbs\geoquizz\control\UsersController($this))->authentifyUser($rq, $rs, $args);
